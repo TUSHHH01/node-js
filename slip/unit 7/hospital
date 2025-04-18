@@ -1,0 +1,117 @@
+var mysql = require('mysql2');
+var con = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '9689',
+    database: 'hospital_db'
+});
+function createDatabase() {
+    con.connect(function (err) {
+        if (err) {
+            throw err;
+        }
+        console.log("connected");
+    });
+    con.query('CREATE DATABASE hospital_db', function (err, result) {
+        if (err) {
+            throw err;
+        }
+        console.log("Database created");
+    });
+}
+
+function createTable() {
+    con.query("CREATE TABLE patient (patientId INT ,name varchar(255), doctorID INT)", function (err, result) {
+        if (err) {
+            throw err;
+        }
+        console.log('Patient Table Created....');
+    })
+}
+
+function createTable() {
+    con.query("CREATE TABLE doctor(doctorId INT,name varchar(255))", function (err, result) {
+        if (err) {
+            throw err;
+        }
+        console.log("Doctor Table Created")
+    })
+}
+
+function insertData(){
+    var sql = "INSERT INTO patient VALUES ? ";
+    var values = [
+        [101,'raj',1],
+        [102,'konde',2],
+        [103,'navle',3],
+        [104,'date',4],
+        [105,'misal',5]
+    ];
+    con.query(sql,[values],function(err,result){
+        if(err){
+            throw err;
+        }
+        console.log('Data Inserted...');
+    })
+}
+
+function insertData(){
+    var sql = "INSERT INTO doctor VALUES ?";
+    var values = [
+        [1,'yash'],
+        [2,'atharv'],
+        [3,'pradumna'],
+        [4,'rudra'],
+        [5,'raghav']
+    ];
+    con.query(sql,[values],function(err,result){
+        if(err){
+            throw err;
+        }
+        console.log('Data inserted');
+    });
+}
+
+// function Leftjoin() {
+//     con.query("SELECT patient.* , doctor.* FROM patient LEFT JOIN doctor ON patient.doctorId = doctor.doctorId", function (err, result) {
+//         if (err) {
+//             throw err;
+//         }
+//         console.log('Query Executed');
+//         console.table(result);
+//     })
+// }
+// Rightjoin();
+function Rightjoin() {
+    con.query("SELECT patient.* , doctor.* FROM patient Right JOIN doctor ON patient.doctorId = doctor.doctorId", function (err, result) {
+        if (err) {
+            throw err;
+        }
+        console.log('Query Executed');
+        console.table(result);
+    })
+}
+
+
+// InnerJoin();
+
+function InnerJoin() {
+    con.query("SELECT patient.*, doctor.* FROM patient INNER JOIN doctor ON patient.doctorId = doctor.doctorId", function (err, result) {
+        if (err) {
+            throw err;
+        }
+        console.log('Query Executed');
+        console.table(result);
+    })
+}
+
+Fulljoin();
+function Fulljoin() {
+    con.query("SELECT patient.*,doctor.* FROM patient LEFT JOIN doctor ON patient.doctorId = doctor.doctorId UNION SELECT patient.*,doctor.* FROM patient RIGHT JOIN doctor ON patient.doctorId = doctor.doctorId", function (err, result) {
+        if (err) {
+            throw err;
+        }
+        console.log('Query Executed');
+        console.table(result);
+    })
+}

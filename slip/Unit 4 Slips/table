@@ -1,0 +1,20 @@
+var http = require('http');
+var url = require('url');
+
+http.createServer(function(req, res){
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    var q = url.parse(req.url, true).query;
+    var b = parseInt(q.number); // Retrieve the value of 'number' query parameter and convert it to an integer
+    var i;
+    
+    function table() {
+        for (i = 1; i <= 10; i++) {
+            var a = b * i;
+            // console.log(a); // This will print the table to the console
+            res.write(a + '<br>'); // This will display the table in the browser
+        }
+        res.end(); // End the response
+    }
+
+    table(); // Call the table function to generate and display the table
+}).listen(8080);
